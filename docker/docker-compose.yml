@@ -1,22 +1,27 @@
 # docker-compose.yml
 # Usage: docker compose up -d  →  then  docker compose exec fuzzer bash
-
+# Note: build context is the docker/ folder, so paths are relative to there
+ 
 services:
   fuzzer:
     build: .
     image: fuzzing-lab:latest
     container_name: fuzzer
-
-    # Mount your local project folder into the container.
-    # Everything you save under /fuzzing/project inside the container
-    # appears live in ./project on your host — and vice versa.
+ 
     volumes:
-      - ./project:/fuzzing/project       # target source code & harness
-      - ./findings:/fuzzing/findings     # AFL++ output (crashes, queue, etc.)
-
+      # Team A — instrumented fuzzer
+      - ../fuzzer-instrumented/src:/fuzzing/instrumented/src
+      - ../fuzzer-instrumented/findings:/fuzzing/instrumented/findings
+      - ../fuzzer-instrumented/plot_output:/fuzzing/instrumented/plot_output
+ 
+      # Team B — QEMU fuzzer
+      - ../fuzzer-qemu/src:/fuzzing/qemu/src
+      - ../fuzzer-qemu/findings:/fuzzing/qemu/findings
+      - ../fuzzer-qemu/plot_output:/fuzzing/qemu/plot_output
+ 
     # AFL++ needs elevated privileges for certain performance tweaks
     privileged: true
-
+ 
     # Keep the container alive so you can exec into it
     stdin_open: true
     tty: true
