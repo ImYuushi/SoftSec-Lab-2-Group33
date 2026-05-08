@@ -13,7 +13,28 @@ void my_read_callback(png_structp png_ptr,
     fread(outBytes, 1, byteCountToRead, fp);
 }
 
+#ifdef FUZZ_PROGRESSIVE
+void on_info_callback(png_structp png_ptr, png_infop info_ptr) {
+    // header has been parsed, nothing to do for fuzzing
+    (void)png_ptr;
+    (void)info_ptr;
+}
 
+void on_row_callback(png_structp png_ptr, png_bytep new_row,
+                     png_uint_32 row_num, int pass) {
+    // called for each decoded row, nothing to do for fuzzing
+    (void)png_ptr;
+    (void)new_row;
+    (void)row_num;
+    (void)pass;
+}
+
+void on_end_callback(png_structp png_ptr, png_infop info_ptr) {
+    // end of image, nothing to do for fuzzing
+    (void)png_ptr;
+    (void)info_ptr;
+}
+#endif
 
 int main(int argc, char *argv[]) {
     // Get the path into a variable
@@ -101,11 +122,25 @@ int main(int argc, char *argv[]) {
     #endif
 
     #ifdef FUZZ_PROGRESSIVE
+    fseek(fp, 0, SEEK_END);
+    long size = ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+
+    png_bytep buf = malloc(size);
+    if (!buf) {
+        png_destroy_read_struct(&png, &info, NULL);
+        fclose(fp);
+        return 0;
+    }
+    fread(buf, 1, size, fp);
+
     png_set_progressive_read_fn(png, NULL,
-                            info_callback,
-                            row_callback,
-                            end_callback);
+                                on_info_callback,
+                                on_row_callback,
+                                on_end_callback);
+
     png_process_data(png, info, buf, size);
+    free(buf);
     #endif
 
     #ifdef FUZZ_TRANSFORMS
