@@ -9,6 +9,17 @@ METHOD="${1:-$DEFAULT_METHOD}"
 DURATION="${2:-100}"
 SEEDS_DIR="/fuzzing/seeds"
 OUT_DIR="/fuzzing/instrumented/findings/$METHOD"
-BINARY="./fuzz_bins/fuzz_fuzz_$METHOD"
-
+BINARY="/fuzzing/instrumented/src/fuzz_bins/fuzz_fuzz_$METHOD"
+mkdir -p "$OUT_DIR"
 afl-fuzz -V "$DURATION" -i "$SEEDS_DIR" -o "$OUT_DIR" -- "$BINARY" @@ 
+
+set -e
+
+cleanup() {
+  echo "[+] fixing ownership..."
+  chown -R ${HOST_UID:-1000}:${HOST_GID:-1000} /fuzzing/instrumented/findings || true
+}
+
+trap cleanup EXIT
+
+exec "$@"

@@ -11,7 +11,7 @@ services:
     volumes:
       # Team A — instrumented fuzzer
       - ../fuzzer-instrumented/src:/fuzzing/instrumented/src
-      - ../fuzzer-instrumented/findings:/fuzzing/instrumented/findings
+      - ../fuzzer-instrumented/findings/:/fuzzing/instrumented/findings
       - ../fuzzer-instrumented/plot_output:/fuzzing/instrumented/plot_output
       - ./seeds:/fuzzing/seeds
       # Team B — QEMU fuzzer
