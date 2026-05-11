@@ -13,7 +13,7 @@ services:
       - ../fuzzer-instrumented/src:/fuzzing/instrumented/src
       - ../fuzzer-instrumented/findings:/fuzzing/instrumented/findings
       - ../fuzzer-instrumented/plot_output:/fuzzing/instrumented/plot_output
- 
+      - ./seeds:/fuzzing/seeds
       # Team B — QEMU fuzzer
       - ../fuzzer-qemu/src:/fuzzing/qemu/src
       - ../fuzzer-qemu/findings:/fuzzing/qemu/findings
