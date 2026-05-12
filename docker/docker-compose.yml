@@ -14,14 +14,21 @@ services:
       - ../fuzzer-instrumented/findings/:/fuzzing/instrumented/findings
       - ../fuzzer-instrumented/plot_output:/fuzzing/instrumented/plot_output
       - ./seeds:/fuzzing/seeds
+      - ./dict:/fuzzing/dict
       # Team B — QEMU fuzzer
       - ../fuzzer-qemu/src:/fuzzing/qemu/src
       - ../fuzzer-qemu/findings:/fuzzing/qemu/findings
       - ../fuzzer-qemu/plot_output:/fuzzing/qemu/plot_output
- 
+
     # AFL++ needs elevated privileges for certain performance tweaks
     privileged: true
  
     # Keep the container alive so you can exec into it
     stdin_open: true
     tty: true
+    environment:
+      # need to run this before docker compose up -d
+      # export UID=$(id -u)
+      # export GID=$(id -g)
+      HOST_UID: ${UID}
+      HOST_GID: ${GID}
