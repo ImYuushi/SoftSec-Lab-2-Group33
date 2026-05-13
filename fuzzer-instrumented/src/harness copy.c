@@ -57,8 +57,6 @@ int main(int argc, char *argv[]) {
     height = png_get_image_height(png, info);
     bit_depth = png_get_bit_depth(png, info);
     color_type = png_get_color_type(png, info);
-
-
     // Do the setjmp shenanigans. TlDR: bad input -> no Crash but return 
     if (setjmp(png_jmpbuf(png))) {
         png_destroy_read_struct(&png, &info, NULL);
@@ -120,9 +118,6 @@ int main(int argc, char *argv[]) {
         row_pointers[y] = malloc(rowbytes);
     }
     png_read_image(png, row_pointers);
-    height = png_get_image_height(png, info);
-    
-   
     #endif
 
     #ifdef FUZZ_PROGRESSIVE
@@ -146,33 +141,7 @@ int main(int argc, char *argv[]) {
     png_process_data(png, info, buf, size);
     free(buf);
     #endif
-    #ifdef FUZZ_INDUCE_BUG
-    if (height == 0) {
-        height = 1;
-    }
 
-    png_bytep *bug_rows =
-        malloc(sizeof(png_bytep) * height);
-
-    if (bug_rows) {
-
-        volatile png_bytep sink;
-
-        /*
-        * Valid indices:
-        *   0 .. height-1
-        *
-        * BUG:
-        *   accesses bug_rows[height]
-        */
-
-        for (png_uint_32 y = 0; y <= height; y++) {
-            sink = bug_rows[y];
-        }
-
-        free(bug_rows);
-    }
-    #endif
     #ifdef FUZZ_TRANSFORMS
     png_set_expand(png);
     png_set_strip_16(png);

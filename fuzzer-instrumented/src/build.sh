@@ -12,6 +12,7 @@ FUZZ_FLAGS=(
     FUZZ_READ_IMAGE
     FUZZ_PROGRESSIVE
     FUZZ_TRANSFORMS
+    FUZZ_INDUCE_BUG
 )
 
 cd "$(dirname "$0")"
