@@ -25,6 +25,19 @@ RUN apt-get update && apt-get install -y \
     # QEMU dependencies (for black-box fuzzing)
     qemu-user \
     qemu-system \
+    meson \
+    pkg-config \
+    libglib2.0-dev \
+    libpixman-1-dev \
+    python3-dev \
+    cargo \
+    flex \
+    bison \
+    texinfo \
+    libcap-dev \
+    libcapstone-dev \
+    libfdt-dev \
+    ninja-build \
     # Address Sanitizer & debug tools
     libasan6 \
     gdb \
@@ -47,8 +60,12 @@ RUN update-alternatives --install /usr/bin/cc  cc  /usr/bin/clang-14 100 && \
 # ── Install AFL++ from source ────────────────────────────────
 RUN git clone https://github.com/AFLplusplus/AFLplusplus /opt/AFLplusplus && \
     cd /opt/AFLplusplus && \
+    make clean && \
     make distrib && \
     make install
+
+RUN cd /opt/AFLplusplus/qemu_mode && \
+    ./build_qemu_support.sh
 
 # ── Download libpng 1.2.56 and apply the CRC patch ──────────
 RUN wget https://download.sourceforge.net/libpng/libpng-1.2.56.tar.gz -P /opt && \
@@ -59,12 +76,14 @@ RUN wget https://download.sourceforge.net/libpng/libpng-1.2.56.tar.gz -P /opt &&
 # ── Build 1: instrumented (AFL++ + ASan) ────────────────────
 #    Used for the white-box fuzzing campaign (Team A)
 RUN cd /opt/libpng-1.2.56 && \
-    CC=afl-clang-fast \
-    CXX=afl-clang-fast++ \
-    CFLAGS="-fsanitize=address -g -O1" \
-    LDFLAGS="-fsanitize=address" \
+    CC=clang-14 \
+    CXX=clang++-14 \
     ./configure --disable-shared --prefix=/opt/libpng-instrumented && \
-    make -j$(nproc) && \
+    make clean && \
+    AFL_USE_ASAN=1 \
+    make -j4 \
+      CC=afl-clang-fast \
+      CXX=afl-clang-fast++ && \
     make install
 
 # ── Build 2: vanilla (gcc, no instrumentation, no ASan) ─────
@@ -81,9 +100,15 @@ RUN cd /opt/libpng-1.2.56 && \
 # ── Set up working directory ─────────────────────────────────
 WORKDIR /fuzzing
 
+# Copy project files
+COPY Makefile /fuzzing
+COPY fuzzer-instrumented/src/build.sh /fuzzing/instrumented/src/
+COPY fuzzer-instrumented/src/harness.c /fuzzing/instrumented/src/
+COPY fuzzer-instrumented/src/run_fuzzer_withFlags.sh /fuzzing/instrumented/src/
+
 # Copy seed corpus and dictionary into image
-COPY seeds/ /fuzzing/seeds/
-COPY dict/   /fuzzing/dict/
+COPY docker/seeds/ /fuzzing/seeds/
+COPY docker/dict/   /fuzzing/dict/
 
 # ── Helpful environment variables ───────────────────────────
 ENV AFL_SKIP_CPUFREQ=1 \
