@@ -16,12 +16,12 @@ BIN="$OUT_DIR/fuzz_noFlag"
 echo -n "Building $BIN  ... "
 
 afl-clang-fast "$SRC"                           \
-    -I/opt/libpng-instrumented/include          \
-    -L/opt/libpng-instrumented/lib              \
+    -I/opt/libpng-afl-asan/include          \
+    -L/opt/libpng-afl-asan/lib              \
     -lpng12 -lz -lm                             \
     -fsanitize=address                          \
     -g -O1                                      \
-    -Wl,-rpath,/opt/libpng-instrumented/lib     \
+    -Wl,-rpath,/opt/libpng-afl-asan/lib     \
     -o "$BIN"
 
 echo "OK"

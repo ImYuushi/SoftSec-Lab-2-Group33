@@ -28,12 +28,12 @@ for FLAG in "${FUZZ_FLAGS[@]}"; do
 
     afl-clang-fast "$SRC"                           \
         -D"$FLAG"                                   \
-        -I/opt/libpng-instrumented/include          \
-        -L/opt/libpng-instrumented/lib              \
+        -I/opt/libpng-afl-asan/include          \
+        -L/opt/libpng-afl-asan/lib              \
         -lpng12 -lz -lm                             \
         -fsanitize=address                          \
         -g -O1                                      \
-        -Wl,-rpath,/opt/libpng-instrumented/lib     \
+        -Wl,-rpath,/opt/libpng-afl-asan/lib     \
         -o "$BIN"
 
     echo "OK"
