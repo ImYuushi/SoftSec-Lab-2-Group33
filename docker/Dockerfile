@@ -101,16 +101,15 @@ RUN cd /opt/libpng-1.2.56 && \
 WORKDIR /fuzzing
 
 # Copy project files
-COPY Makefile /fuzzing
-COPY fuzzer-instrumented/src/build.sh /fuzzing/instrumented/src/
-COPY fuzzer-instrumented/src/build_blackbox.sh /fuzzing/instrumented/src/
-COPY fuzzer-instrumented/src/harness.c /fuzzing/instrumented/src/
-COPY fuzzer-instrumented/src/run_fuzzer_withFlags.sh /fuzzing/instrumented/src/
-COPY fuzzer-instrumented/src/run_fuzzer_blackbox.sh /fuzzing/instrumented/src/
+# RUN ls
+# COPY ../Makefile /fuzzing
+# COPY ../fuzzer-instrumented/src/build.sh /fuzzing/instrumented/src/
+# COPY ../fuzzer-instrumented/src/harness.c /fuzzing/instrumented/src/
+# COPY ../fuzzer-instrumented/src/run_fuzzer_withFlags.sh /fuzzing/instrumented/src/
 
 # Copy seed corpus and dictionary into image
-COPY docker/seeds/ /fuzzing/seeds/
-COPY docker/dict/   /fuzzing/dict/
+# COPY docker/seeds/ /fuzzing/seeds/
+# COPY docker/dict/   /fuzzing/dict/
 
 # ── Helpful environment variables ───────────────────────────
 ENV AFL_SKIP_CPUFREQ=1 \
