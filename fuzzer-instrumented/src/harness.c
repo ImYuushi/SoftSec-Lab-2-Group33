@@ -1,4 +1,6 @@
 #include <png.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <setjmp.h>
 
 jmp_buf jump_buffer;
