@@ -13,7 +13,7 @@ BINARY="/fuzzing/instrumented/src/fuzz_bins/fuzz_fuzz_$METHOD"
 DICTS="/fuzzing/dict/png.dict"
 PLOT_DIR="/fuzzing/instrumented/plot-output/$METHOD"
 mkdir -p "$OUT_DIR"
-mkdir -p PLOT_DIR
+mkdir -p "$PLOT_DIR"
 afl-fuzz -V "$DURATION" -i "$SEEDS_DIR" -o "$OUT_DIR" -x "$DICTS" -- "$BINARY" @@ 
 afl-plot  "$OUT_DIR/default" "$PLOT_DIR"
 set -e

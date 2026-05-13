@@ -9,6 +9,7 @@ services:
     container_name: fuzzer
  
     volumes:
+      - ../Makefile:/fuzzing/Makefile
       # Team A — instrumented fuzzer
       - ../fuzzer-instrumented/src:/fuzzing/instrumented/src
       - ../fuzzer-instrumented/findings/:/fuzzing/instrumented/findings

@@ -14,6 +14,8 @@ FUZZ_FLAGS=(
     FUZZ_TRANSFORMS
 )
 
+cd "$(dirname "$0")"
+
 mkdir -p "$OUT_DIR"
 
 echo "Source : $SRC"

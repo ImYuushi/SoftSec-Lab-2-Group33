@@ -17,6 +17,25 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     patch \
     zlib1g-dev \
     qemu-user \
+    qemu-system \
+    meson \
+    pkg-config \
+    libglib2.0-dev \
+    libpixman-1-dev \
+    python3-dev \
+    cargo \
+    flex \
+    bison \
+    texinfo \
+    libcap-dev \
+    libcapstone-dev \
+    libfdt-dev \
+    ninja-build \
+    # Address Sanitizer & debug tools
+    libasan6 \
+    gdb \
+    valgrind \
+    # Python (for afl-plot and helper scripts)
     python3 \
     python3-pip \
     gnuplot \
@@ -63,6 +82,13 @@ RUN cd /opt/libpng-1.2.56 && \
     make install
 
 WORKDIR /fuzzing
+
+# Copy project files
+# RUN ls
+# COPY ../Makefile /fuzzing
+# COPY ../fuzzer-instrumented/src/build.sh /fuzzing/instrumented/src/
+# COPY ../fuzzer-instrumented/src/harness.c /fuzzing/instrumented/src/
+# COPY ../fuzzer-instrumented/src/run_fuzzer_withFlags.sh /fuzzing/instrumented/src/
 
 ENV AFL_SKIP_CPUFREQ=1 \
     AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1 \
