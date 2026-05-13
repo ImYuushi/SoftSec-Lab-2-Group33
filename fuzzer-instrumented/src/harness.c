@@ -45,7 +45,9 @@ int main(int argc, char *argv[]) {
     // Read file into png_file from input, i. e. argv, simple (or at least get a pointer to it?)
     FILE *fp = fopen(argv[1], "rb");    
     // initialize png_struct or pointer to it?
-
+    if (!fp) {
+        return 0;
+    }
     
     png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     png_infop info = png_create_info_struct(png);
@@ -56,12 +58,9 @@ int main(int argc, char *argv[]) {
     bit_depth = png_get_bit_depth(png, info);
     color_type = png_get_color_type(png, info);
     // Do the setjmp shenanigans. TlDR: bad input -> no Crash but return 
-    if (setjmp(jump_buffer)) { // will be called by png in case of error. If no calls but just crash, no setjmp and afl logs it
-
-        // play trashman
+    if (setjmp(png_jmpbuf(png))) {
         png_destroy_read_struct(&png, &info, NULL);
         fclose(fp);
-        
         return 0;
     }
     /* set up input source */
