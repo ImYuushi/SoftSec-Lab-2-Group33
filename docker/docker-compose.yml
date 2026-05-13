@@ -32,3 +32,4 @@ services:
       # export GID=$(id -g)
       HOST_UID: ${UID}
       HOST_GID: ${GID}
+      ASAN_OPTIONS: "symbolize=1"
