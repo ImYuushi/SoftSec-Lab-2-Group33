@@ -21,7 +21,7 @@ set -e
 cleanup() {
   echo "[+] fixing ownership..."
   chown -R ${HOST_UID:-1000}:${HOST_GID:-1000} /fuzzing/instrumented/findings || true
-  chown -R ${HOST_UID:-1000}:${HOST_GID:-1000} /fuzzing/instrumented/plot_output || true
+  chown -R ${HOST_UID:-1000}:${HOST_GID:-1000} /fuzzing/instrumented/plot-output || true
 }
 
 trap cleanup EXIT

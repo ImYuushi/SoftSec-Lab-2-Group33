@@ -4,6 +4,7 @@ AFL_CUSTOM_INFO_PROGRAM=/fuzzing/instrumented/src/fuzz_bins/fuzz_fuzz_read_image
 AFL_CUSTOM_INFO_PROGRAM_ARGV=@@
 AFL_CUSTOM_INFO_OUT=/fuzzing/instrumented/findings/read_image/default
 AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1
+AFL_TRY_AFFINITY=1
 AFL_SKIP_CPUFREQ=1
 # command line:
-'afl-fuzz' '-V' '100' '-i' '/fuzzing/seeds' '-o' '/fuzzing/instrumented/findings/read_image' '-x' '/fuzzing/dict/png.dict' '--' '/fuzzing/instrumented/src/fuzz_bins/fuzz_fuzz_read_image' '@@'
+'afl-fuzz' '-V' '1800' '-i' '/fuzzing/seeds' '-o' '/fuzzing/instrumented/findings/read_image' '-x' '/fuzzing/dict/png.dict' '--' '/fuzzing/instrumented/src/fuzz_bins/fuzz_fuzz_read_image' '@@'
