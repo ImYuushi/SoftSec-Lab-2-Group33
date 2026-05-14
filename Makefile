@@ -15,11 +15,13 @@ all: build
 build:
 	./instrumented/src/build.sh
 	./instrumented/src/build_blackbox.sh
+	./instrumented/src/build_q8.sh 
 
 fuzz:
 	./instrumented/src/run_fuzzer_withFlags.sh progressive 1800
 	./instrumented/src/run_fuzzer_withFlags.sh transforms 1800
 	./instrumented/src/run_fuzzer_withFlags.sh read_image 1800
+	./instrumented/src/run_fuzzer_withFlags.sh induced_bug 100
 
 fuzz-qemu:
 	./instrumented/src/run_fuzzer_blackbox.sh progressive 1800
@@ -29,11 +31,16 @@ fuzz-qemu:
 fuzz_read_image:
 	./instrumented/src/run_fuzzer_withFlags.sh read_image 1800
 
+fuzz_q8:
+	./instrumented/src/run_q8.sh 
+
 fuzz_progressive:
 	./instrumented/src/run_fuzzer_withFlags.sh progressive 1800
 
 fuzz_transforms:
 	./instrumented/src/run_fuzzer_withFlags.sh transforms 1800
+
+
 
 clean:
 	rm -rf fuzz_bins
