@@ -17,14 +17,14 @@ build:
 	./instrumented/src/build_blackbox.sh
 
 fuzz:
-	./instrumented/src/run_fuzzer_withFlags.sh read_image 1800
 	./instrumented/src/run_fuzzer_withFlags.sh progressive 1800
 	./instrumented/src/run_fuzzer_withFlags.sh transforms 1800
+	./instrumented/src/run_fuzzer_withFlags.sh read_image 1800
 
 fuzz-qemu:
-	./instrumented/src/run_fuzzer_blackbox.sh read_image 1800
 	./instrumented/src/run_fuzzer_blackbox.sh progressive 1800
 	./instrumented/src/run_fuzzer_blackbox.sh transforms 1800
+	./instrumented/src/run_fuzzer_blackbox.sh read_image 1800
 
 fuzz_read_image:
 	./instrumented/src/run_fuzzer_withFlags.sh read_image 1800
