@@ -13,13 +13,13 @@ services:
       # Team A — instrumented fuzzer
       - ../fuzzer-instrumented/src:/fuzzing/instrumented/src
       - ../fuzzer-instrumented/findings/:/fuzzing/instrumented/findings
-      - ../fuzzer-instrumented/plot_output:/fuzzing/instrumented/plot_output
+      - ../fuzzer-instrumented/plot-output:/fuzzing/instrumented/plot-output
       - ./seeds:/fuzzing/seeds
       - ./dict:/fuzzing/dict
       # Team B — QEMU fuzzer
       - ../fuzzer-qemu/src:/fuzzing/qemu/src
       - ../fuzzer-qemu/findings:/fuzzing/qemu/findings
-      - ../fuzzer-qemu/plot_output:/fuzzing/qemu/plot_output
+      - ../fuzzer-qemu/plot-output:/fuzzing/qemu/plot-output
 
     # AFL++ needs elevated privileges for certain performance tweaks
     privileged: true
@@ -33,4 +33,3 @@ services:
       # export GID=$(id -g)
       HOST_UID: ${UID}
       HOST_GID: ${GID}
-      ASAN_OPTIONS: "symbolize=1"
